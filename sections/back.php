@@ -55,5 +55,4 @@ require $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 // Inclui o rodapé da página
 require $_SERVER['DOCUMENT_ROOT'] . "/_footer.php";
 
-
 ?>

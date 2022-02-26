@@ -1,16 +1,16 @@
 <?php // ################# Quebra do template ################# 
-        ?>
+?>
 
-        </main>
+</main>
 
-        <?php // Rodapé 
-        ?>
-        <footer>
+<?php // Rodapé 
+?>
+<footer>
 
-            &copy; Copyright 2022 Programeiros
+    &copy; Copyright 2022 <?php if (date('Y') > '2022') echo ' - ' . date('Y') ?> <?php echo $site_owner ?>.
 
-        </footer>
+</footer>
 
-        </body>
+</body>
 
-        </html>
+</html>

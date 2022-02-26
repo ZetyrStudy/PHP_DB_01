@@ -1,7 +1,16 @@
 <?php
 
-// Inclui o cbeçalho da página
-require $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
+// Inclui arquivo de configuração
+require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
+
+// Define o título DESTA página.
+$page_title = "";
+
+// Opção ativa no menu
+$page_menu = "index";
+
+// Inclui o cabeçalho da página
+require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 
 ?>
 
@@ -53,6 +62,6 @@ require $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 <?php
 
 // Inclui o rodapé da página
-require $_SERVER['DOCUMENT_ROOT'] . "/_footer.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/_footer.php";
 
 ?>

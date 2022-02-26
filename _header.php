@@ -1,3 +1,13 @@
+<?php
+
+// Formata o título da página
+if ($page_title == "") {
+    $page_title = $site_name . ' ~ ' . $site_slogan;
+} else {
+    $page_title = $site_name . " ~ " . $page_title;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -6,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/img/favicon.png">
-    <title>Programeiros</title>
+    <title><?php echo $page_title; ?></title>
 </head>
 
 <body>
@@ -15,8 +25,8 @@
     ?>
     <header>
 
-        <a href="/index.php"><img src="/img/logo_01.png" alt="Logotipo de Programeiros"></a>
-        <h1>Programeiros<small>Codificando o futuro.</small></h1>
+        <a href="/index.php"><img src="<?php echo $site_logo ?>" alt="Logotipo de <?php echo $site_name; ?>"></a>
+        <h1><?php echo $site_name; ?><small><?php echo $site_slogan ?></small></h1>
 
     </header>
 
@@ -24,10 +34,13 @@
     ?>
     <nav>
 
-        <a href="/index.php">Início</a>
-        <a href="/articles.php">Artigos</a>
-        <a href="/contacts.php">Contatos</a>
-        <a href="/about.php">Sobre</a>
+        <a href="/index.php"><?php if ($page_menu == 'index') echo "<strong>INÍCIO</strong>"; else echo "Início"; ?></a>
+        &bull;
+        <a href="/articles.php"><?php if($page_menu == 'articles') echo "<strong>ARTIGOS</strong>"; else echo "Artigos"; ?></a>
+        &bull;
+        <a href="/contacts.php"><?php if($page_menu == 'contacts') echo "<strong>FAÇA CONTATO</strong>"; else echo "Faça Contato"; ?></a>
+        &bull;
+        <a href="/about.php"><?php if($page_menu == 'about') echo "<strong>SOBRE</strong>"; else echo "Sobre"; ?></a>
 
     </nav>
 
