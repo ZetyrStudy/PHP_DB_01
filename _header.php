@@ -2,8 +2,12 @@
 
 // Formata o título da página
 if ($page_title == "") {
+
+    // Se não definiu um title, usa o formato abaixo:
     $page_title = $site_name . ' ~ ' . $site_slogan;
 } else {
+
+    // Se definiu um title, usa o formato abaixo:
     $page_title = $site_name . " ~ " . $page_title;
 }
 
@@ -13,7 +17,6 @@ if ($page_title == "") {
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/img/favicon.png">
     <title><?php echo $page_title; ?></title>
@@ -25,7 +28,7 @@ if ($page_title == "") {
     ?>
     <header>
 
-        <a href="/index.php"><img src="<?php echo $site_logo ?>" alt="Logotipo de <?php echo $site_name; ?>"></a>
+        <a href="/"><img src="<?php echo $site_logo ?>" alt="Logotipo de <?php echo $site_name; ?>"></a>
         <h1><?php echo $site_name; ?><small><?php echo $site_slogan ?></small></h1>
 
     </header>
@@ -34,13 +37,13 @@ if ($page_title == "") {
     ?>
     <nav>
 
-        <a href="/index.php"><?php if ($page_menu == 'index') echo "<strong>INÍCIO</strong>"; else echo "Início"; ?></a>
+        <a href="/"><?php if ($page_menu == 'index') echo "<strong>INÍCIO</strong>"; else echo "Início"; ?></a>
         &bull;
-        <a href="/articles.php"><?php if($page_menu == 'articles') echo "<strong>ARTIGOS</strong>"; else echo "Artigos"; ?></a>
+        <a href="/page/articles.php"><?php if($page_menu == 'articles') echo "<strong>ARTIGOS</strong>"; else echo "Artigos"; ?></a>
         &bull;
-        <a href="/contacts.php"><?php if($page_menu == 'contacts') echo "<strong>FAÇA CONTATO</strong>"; else echo "Faça Contato"; ?></a>
+        <a href="/page/contacts.php"><?php if($page_menu == 'contacts') echo "<strong>FAÇA CONTATO</strong>"; else echo "Faça Contato"; ?></a>
         &bull;
-        <a href="/about.php"><?php if($page_menu == 'about') echo "<strong>SOBRE</strong>"; else echo "Sobre"; ?></a>
+        <a href="/page/about.php"><?php if($page_menu == 'about') echo "<strong>SOBRE</strong>"; else echo "Sobre"; ?></a>
 
     </nav>
 

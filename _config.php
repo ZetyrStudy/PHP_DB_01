@@ -4,6 +4,28 @@
 // DEVE ser a primeira linha de código do site.
 header("Content-type: text/html; charset=utf-8");
 
+// Conexão com o banco de dados MySQL (endereço do servidor MySQL, nome de usuário, senha do db, nome do banco de dados)
+$conn = new mysqli('localhost', 'root', '', 'php_app');
+
+// Testa se conexão foi bem sucedida.
+if ($conn->connect_error) {
+    die("Falha de conexão com banco de dados: " . $conn->connect_error);
+}
+
+// Consulta de teste. Apague depois de testar.
+$result = $conn->query("SELECT * FROM articles");
+
+while ($row = $result->fetch_assoc()) {
+    echo '<pre>';
+    echo $row['article_title'] . ' - ' . $row['article_intro'];
+    echo '</pre>';
+}
+
+// Teste de INSERT. Apague depois de testar.
+$conn->query("INSERT INTO contacts (contact_name, contact_email, contact_subject, contact_message ) VALUES ('Joca', 'joca@email', 'Teste', 'Mensagem do joca')");
+
+echo '<hr><hr>';
+
 /**
  * Variáveis do tema
  */
