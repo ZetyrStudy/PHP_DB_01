@@ -7,18 +7,37 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
  * Seu código PHP desta página entra aqui! *
  *******************************************/
 
+// Variáveis desta página
+$name = $email = $subject = $message = $feedback = '';
+
+// Variável que exibe/oculta formulário.
+$show_form = true;
+
 // Detecta se o formulário foi enviado...
 if (isset($_POST['send'])) {
 
     // Se foi enviado, processa o formulário...
 
+    // Verifica se todos os campos form preenchidos
+
+    $name = sanitize('name', 'string');
+    $email = sanitize('email', 'email');
+    $subject = sanitize('subject', 'string');
+    $message = sanitize('message', 'string');
+
+    if ($name === '' or $email === '' or $subject === '' or $message === '') :
+        $feedback = '<h3 style="color:red">Erro: por favor, preencha todos os campos!</h3>';
+    else :
+
+        /*
     // Isso é somente para testes. Remova depois dos testes.
     echo '<pre>';
     print_r($_POST);
     echo '</pre><hr><hr>';
+    */
 
-    // Insere contato no banco de dados
-    $sql = <<<SQL
+        // Cria a query para slvar no banco de dados.
+        $sql = <<<SQL
 
 INSERT INTO contacts (
     contact_name, 
@@ -26,17 +45,46 @@ INSERT INTO contacts (
     contact_subject, 
     contact_message
 ) VALUES (
-    '{$_POST["name"]}', 
-    '{$_POST["email"]}',
-    '{$_POST["subject"]}',
-    '{$_POST["message"]}'
+    '{$name}', 
+    '{$email}',
+    '{$subject}',
+    '{$message}'
 );
 
 SQL;
 
-    // exit($sql); --> Debug
+        // Salva contato no banco de dados.
+        $conn->query($sql);
 
-    $conn->query($sql);
+        // Cria mensagem de confirmação.
+        $feedback = '<h3 style="color:green">Oba! Seu contato foi enviado!</h3>';
+
+        // Oculto o formulário.
+        $show_form = false;
+
+        // Data de envio.
+        $now = date('d/m/Y \à\s H:i');
+
+        // Enviar e-mail para o administrador.
+
+        $to = 'adm@ptp_db_01.com';
+        $sj = 'Alguém entrou em contato';
+        $msg = <<<MSG
+
+Contato enviado pelo formulário do site:
+
+    Data: {$now}
+    Remetente: {$name}
+    E-mail: {$email}
+    Assunto: {$subject}
+    -----------------------------
+    {$message}
+            
+MSG;
+
+        @mail($to, $sj, $msg);
+
+    endif;
 }
 
 /*********************************************
@@ -61,35 +109,41 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
     <h2>Faça contato</h2>
     <p>Preencha todos os campos do formulário abaixo para entrar em contato com a equipe do <strong><?php echo $site_name ?></strong>.</p>
 
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-        <input type="hidden" name="send" value="true">
+    <?php echo $feedback; ?>
 
-        <p>
-            <label for="name">Seu nome:</label>
-            <input type="text" name="name" id="name" placeholder="Preencha seu nome completo." autofocus>
-        </p>
+    <?php if ($show_form) : ?>
 
-        <p>
-            <label for="email">Seu e-mail:</label>
-            <input type="email" name="email" id="email" placeholder="Seu e-mail principal.">
-        </p>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+            <input type="hidden" name="send" value="true">
 
-        <p>
-            <label for="subject">Assunto:</label>
-            <input type="text" name="subject" id="subject" placeholder="Um resumo do seu contato.">
-        </p>
+            <p>
+                <label for="name">Seu nome:</label>
+                <input type="text" name="name" id="name" placeholder="Preencha seu nome completo." value="<?php echo $name ?>" autofocus>
+            </p>
 
-        <p>
-            <label for="message">Mensagem:</label>
-            <textarea name="message" id="message" placeholder="Escreva o quanto precisar."></textarea>
-        </p>
+            <p>
+                <label for="email">Seu e-mail:</label>
+                <input type="email" name="email" id="email" placeholder="Seu e-mail principal." value="<?php echo $email ?>">
+            </p>
 
-        <p>
-            <label></label>
-            <button type="submit">Enviar</button>
-        </p>
+            <p>
+                <label for="subject">Assunto:</label>
+                <input type="text" name="subject" id="subject" placeholder="Um resumo do seu contato." value="<?php echo $subject ?>">
+            </p>
 
-    </form>
+            <p>
+                <label for="message">Mensagem:</label>
+                <textarea name="message" id="message" placeholder="Escreva o quanto precisar."><?php echo $message ?></textarea>
+            </p>
+
+            <p>
+                <label></label>
+                <button type="submit">Enviar</button>
+            </p>
+
+        </form>
+
+    <?php endif; ?>
 
 </article>
 
