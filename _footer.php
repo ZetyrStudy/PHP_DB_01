@@ -7,7 +7,7 @@
 ?>
 <footer>
 
-    &copy; Copyright 2022 <?php if (date('Y') > '2022') echo ' - ' . date('Y') ?> <?php echo $site_owner ?>.
+    &copy; Copyright 2022 <?php if (date('Y') > '2022') echo ' - ' . date('Y') ?> <?php echo $site['owner'] ?>.
 
 </footer>
 

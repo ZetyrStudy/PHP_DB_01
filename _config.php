@@ -1,22 +1,22 @@
 <?php
-
-// Configura a página de caracteres do PHP para UTF-8
-// DEVE ser a primeira linha de código do site.
+/*
+ * Configura a página de caracteres do PHP para UTF-8
+ * DEVE ser a primeira linha de código do site.
+ */
 header("Content-type: text/html; charset=utf-8");
 
-// Faz conexão com MySQL/MariaDB
-// Os dados da conexão estão em "_config.ini"
+/*
+ * Faz conexão com MySQL/MariaDB.
+ * Os dados da conexão estão em "/_config.ini".
+ */
+
+// Armazena o arquivo "/_config.ini" em um array "$i"...
 $i = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/_config.ini', true);
 
-/*
-// Debug do MySQL
-echo '<pre>';
-print_r($i);
-echo '</pre>';
-exit;
-*/
-
+// Itera cada chve do array...
 foreach ($i as $key => $value) :
+
+    // Se a chave tem o mesmo nome do servidor...
     if ($_SERVER['SERVER_NAME'] === $key) :
 
         // Conexão com MySQL/MariaDB usando "mysqli" (orientada a objetos)
@@ -27,55 +27,46 @@ foreach ($i as $key => $value) :
     endif;
 endforeach;
 
-// Seta transações com MySQL/MariaDB para UTF-8
+// Seta transações com MySQL/MariaDB para UTF-8.
 $conn->query("SET NAMES 'utf8'");
 $conn->query('SET character_set_connection=utf8');
 $conn->query('SET character_set_client=utf8');
 $conn->query('SET character_set_results=utf8');
 
-// Seta dias da semana e meses do MySQL/MariaDB para "português do Brasil"
+// Seta dias da semana e meses do MySQL/MariaDB para "português do Brasil".
 $conn->query('SET GLOBAL lc_time_names = pt_BR');
 $conn->query('SET lc_time_names = pt_BR');
 
-/*
-// Consulta de teste. Apague depois de testar.
-$result = $conn->query("SELECT * FROM articles");
+// Define o fuso horário (opcional).
+date_default_timezone_set('America/Sao_Paulo');
 
-while ($row = $result->fetch_assoc()) :
-    echo '<pre>';
-    echo $row['article_title'] . ' - ' . $row['article_intro'];
-    echo '</pre>';
+/******************************************************
+ * Gera variáveis do tema à partir do banco de dados. *
+ ******************************************************/
+
+$sql = "SELECT * FROM config;";
+$res = $conn->query($sql);
+while ($x = $res->fetch_assoc()) :
+
+    $p = explode('_', $x['var']);
+    $var = $p[0];
+    $key = $p[1];
+
+    $$var[$key] = $x['val'];
+
 endwhile;
 
-// Teste de INSERT. Apague depois de testar.
-$conn->query("INSERT INTO contacts (contact_name, contact_email, contact_subject, contact_message ) VALUES ('Joca', 'joca@email', 'Teste', 'Mensagem do joca')");
-echo '<hr><hr>';
-*/
-
-/**
- * Variáveis do tema
- */
-
-// Nome do aplicativo
-$site_name = "Decodificando";
-
-// Slogan do site
-$site_slogan = "Just Code it.";
-
-// Logotipo do site
-$site_logo = "/img/logo_decodificando.jpg";
-
-// Proprietário do aplicativo (mensagem de copyright)
-$site_owner = "Turma 2021.1";
+// echo '<pre>';
+// print_r($site);
+// print_r($social);
+// print_r($tema);
+// echo '</pre>';
 
 // Define o título <title>...</title> de cada página
 $page_title = "";
 
 // Define o link ativo no menu principal
 $page_menu = "";
-
-// Define o fuso horário (opcional).
-date_default_timezone_set('America/Sao_Paulo');
 
 /********************
  * Funções globais. *
@@ -88,7 +79,7 @@ function sanitize($field_name, $field_type)
     // Variável com valor do campo filtrado.
     $field_value = '';
 
-    // Aplica o filtro adequado ao tipo de campo.
+    // Aplica o filtro adequado, de acordo com o tipo de campo.
     switch ($field_type):
 
             // Se é um campo 'string', remove caracteres perigosos.

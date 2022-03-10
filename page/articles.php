@@ -3,50 +3,76 @@
 // Inclui arquivo de configuração
 require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
 
+/*******************************************
+ * Seu código PHP desta página entra aqui! *
+ *******************************************/
+
+// Variável que contém a lista de artigos (string).
+$art_list = '';
+
+/*
+ * Query que obtém so artigos:
+ *    Ordenados pelo mais recente.
+ *    Somente com o status 'on'.
+ *    Somente da data atual e anteriores.
+ */
+$sql = <<<SQL
+
+SELECT article_id, article_title, article_image, article_intro 
+FROM articles 
+WHERE article_status = 'on' AND article_date <= NOW() 
+ORDER BY article_date DESC;
+
+SQL;
+
+$res = $conn->query($sql);
+while ($art = $res->fetch_assoc()) {
+
+    $art_list .= <<<HTML
+
+<div class="article-item">
+
+    <div class="article-item-img">
+        <a href="/page/view.php?id={$art['article_id']}" title="Clique para ver o artigo completo."><img src="{$art['article_image']}" alt="{$art['article_title']}"></a>
+    </div>
+
+    <div class="article-item-intro">
+        <h3><a href="/page/view.php?id={$art['article_id']}" title="Clique para ver o artigo completo.">{$art['article_title']}</a></h3>
+        {$art['article_intro']}
+    </div>
+
+</div>
+
+HTML;
+}
+
+/*********************************************
+ * Seu código PHP desta página termina aqui! *
+ *********************************************/
+
 // Define o título DESTA página.
 $page_title = "Artigos";
 
 // Opção ativa no menu
 $page_menu = "articles";
 
-// Inclui o cbeçalho da página
+// Inclui o cabeçalho da página
 require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 
 ?>
 
-<?php // Conteúdo ?>
+<?php // Conteúdo 
+?>
 <article>
 
-    <h2>Artigos</h2>
+    <h2>Artigos Recentes</h2>
 
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil obcaecati id recusandae minus porro
-        laudantium rem. Similique repellendus incidunt ad labore unde voluptates, recusandae at, expedita magnam
-        iure facere quia?</p>
-
-    <h3>Links:</h3>
-
-    <ul>
-        <?php // O atributo 'target="_blank"' do link força a abertura em outra guia do navegador ?>
-        <li><a href="http://catabits.com.br" target="_blank">Site do Fessô</a></li>
-        <li><a href="https://americanas.com" target="_blank">Site Hackeado</a></li>
-        <li><a href="https://www.rj.senac.br" target="_blank">Senac RJ</a></li>
-    </ul>
-
-    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque quod suscipit ratione commodi,
-        corrupti tempore mollitia accusantium in eligendi dolores dicta dolore, accusamus tenetur omnis, dolor
-        ducimus! Iure, ad ea!</p>
-
-    <div>
-        <img src="https://picsum.photos/400/200" alt="Imagem aleatória">
-    </div>
-
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam maxime a saepe voluptatum laborum
-        magnam, temporibus blanditiis aspernatur, nihil vero consequuntur quidem perferendis aliquam. Rem
-        voluptatibus consequuntur neque ex explicabo!</p>
+    <?php echo $art_list ?>
 
 </article>
 
-<?php // Barra lateral ?>
+<?php // Barra lateral 
+?>
 <aside>
 
     <h3>Seções:</h3>

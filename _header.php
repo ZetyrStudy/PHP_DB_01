@@ -4,11 +4,11 @@
 if ($page_title == "") {
 
     // Se não definiu um title, usa o formato abaixo:
-    $page_title = $site_name . ' ~ ' . $site_slogan;
+    $page_title = $site['name'] . ' ~ ' . $site['slogan'];
 } else {
 
     // Se definiu um title, usa o formato abaixo:
-    $page_title = $site_name . " ~ " . $page_title;
+    $page_title = $site['name'] . " ~ " . $page_title;
 }
 
 ?>
@@ -28,8 +28,8 @@ if ($page_title == "") {
     ?>
     <header>
 
-        <a href="/"><img src="<?php echo $site_logo ?>" alt="Logotipo de <?php echo $site_name; ?>"></a>
-        <h1><?php echo $site_name; ?><small><?php echo $site_slogan ?></small></h1>
+        <a href="/"><img src="<?php echo $site['logo'] ?>" alt="Logotipo de <?php echo $site['name']; ?>"></a>
+        <h1><?php echo $site['name']; ?><small><?php echo $site['slogan'] ?></small></h1>
 
     </header>
 
