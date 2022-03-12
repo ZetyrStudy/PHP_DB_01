@@ -26,7 +26,7 @@ ORDER BY article_date DESC;
 SQL;
 
 $res = $conn->query($sql);
-while ($art = $res->fetch_assoc()) {
+while ($art = $res->fetch_assoc()) :
 
     $art_list .= <<<HTML
 
@@ -44,7 +44,7 @@ while ($art = $res->fetch_assoc()) {
 </div>
 
 HTML;
-}
+endwhile;
 
 /*********************************************
  * Seu código PHP desta página termina aqui! *

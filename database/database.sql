@@ -59,6 +59,17 @@ CREATE TABLE config (
     descrition VARCHAR(255) COMMENT 'Descrição da variável'
 );
 
+-- Cria tabela de cadastro de usuários.
+CREATE TABLE users (
+    user_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    user_birth DATE NOT NULL,
+    user_password VARCHAR(255) NOT NULL,
+    user_status ENUM('on', 'off', 'deleted') NOT NULL DEFAULT 'on'
+);
+
 -- Teste de inserção na tabela 'contacts'.
 INSERT INTO `contacts` (
     `contact_name`,
@@ -179,4 +190,30 @@ INSERT INTO config ( var, val, descrition ) VALUES
 ('social_facebook', 'https://facebook.com/Decodificando', 'Rede social'),
 ('social_github', 'https://github.com/Decodificando', 'Rede social'),
 ('social_whatsapp', 'https://wa.me/5521987654321', 'Rede social'),
-('social_youtube', 'https://youtube.com/Decodificando', 'Rede social');
+('social_youtube', 'https://youtube.com/Decodificando', 'Rede social'); 
+
+-- Insere registros na tabela 'users'
+INSERT INTO users (
+    user_name,
+    user_email,
+    user_birth,
+    user_password
+) VALUES 
+(
+    'Joca da Silva',
+    'joca@silva.com',
+    '2001-10-12',
+    SHA2('1234567890', 512)
+),
+(
+    'Setembrino Trocatapas',
+    'set@brino.com',
+    '1998-02-18',
+    SHA2('1234567890', 512)
+),
+(
+    'Edicleuza Sirineuza',
+    'edi@siri.com',
+    '2010-09-25',
+    SHA2('1234567890', 512)
+)

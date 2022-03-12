@@ -1,15 +1,34 @@
 <?php
 
 // Formata o título da página
-if ($page_title == "") {
+if ($page_title == "") :
 
     // Se não definiu um title, usa o formato abaixo:
     $page_title = $site['name'] . ' ~ ' . $site['slogan'];
-} else {
+else :
 
     // Se definiu um title, usa o formato abaixo:
     $page_title = $site['name'] . " ~ " . $page_title;
-}
+endif;
+
+// Formata a lista de redes sociais do footer
+$social_list = '<ul>';
+
+// Itera cada rede social
+foreach ($social as $key => $value) :
+
+    // Converte o nome da rede social com primeira letra maiúscula
+    $key = ucfirst($key);
+
+    // Adiciona a rede social à lista
+    $social_list .= <<<HTML
+    <li><a href="{$value}" target="_blank" title="Siga-nos no {$key}.">{$key}</a></li>\n
+HTML;
+
+endforeach;
+
+// Fecha a lista de redes sociais
+$social_list .= '</ul>';
 
 ?>
 <!DOCTYPE html>
@@ -24,6 +43,8 @@ if ($page_title == "") {
 
 <body>
 
+    <a id="top"></a>
+
     <?php // Cabeçalho 
     ?>
     <header>
@@ -37,13 +58,17 @@ if ($page_title == "") {
     ?>
     <nav>
 
-        <a href="/"><?php if ($page_menu == 'index') echo "<strong>INÍCIO</strong>"; else echo "Início"; ?></a>
+        <a href="/"><?php if ($page_menu == 'index') echo "<strong>INÍCIO</strong>";
+                    else echo "Início"; ?></a>
         &bull;
-        <a href="/page/articles.php"><?php if($page_menu == 'articles') echo "<strong>ARTIGOS</strong>"; else echo "Artigos"; ?></a>
+        <a href="/page/articles.php"><?php if ($page_menu == 'articles') echo "<strong>ARTIGOS</strong>";
+                                        else echo "Artigos"; ?></a>
         &bull;
-        <a href="/page/contacts.php"><?php if($page_menu == 'contacts') echo "<strong>FAÇA CONTATO</strong>"; else echo "Faça Contato"; ?></a>
+        <a href="/page/contacts.php"><?php if ($page_menu == 'contacts') echo "<strong>FAÇA CONTATO</strong>";
+                                        else echo "Faça Contato"; ?></a>
         &bull;
-        <a href="/page/about.php"><?php if($page_menu == 'about') echo "<strong>SOBRE</strong>"; else echo "Sobre"; ?></a>
+        <a href="/page/about.php"><?php if ($page_menu == 'about') echo "<strong>SOBRE</strong>";
+                                    else echo "Sobre"; ?></a>
 
     </nav>
 

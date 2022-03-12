@@ -44,23 +44,57 @@ date_default_timezone_set('America/Sao_Paulo');
  * Gera variáveis do tema à partir do banco de dados. *
  ******************************************************/
 
+// Obtém variáveis e seus valores do banco de dados
 $sql = "SELECT * FROM config;";
 $res = $conn->query($sql);
+
+// Gera arrays com as configurações
 while ($x = $res->fetch_assoc()) :
 
+    /*
+     * Quebra o nome da variável, obtida do DB. Ex.:
+     *   site_name ==> $var => 'site' e $key => 'name'
+     *   site_logo ==> $var => 'site' e $key => 'logo'
+     */
     $p = explode('_', $x['var']);
     $var = $p[0];
     $key = $p[1];
 
+    /*
+     * Cria variáveis (arrays) de configuração. Ex.:
+     *   site_name ==> $var => 'site' e $key => 'name' então, $site['name'] => $x[val] 
+     *   site_logo ==> $var => 'site' e $key => 'logo' então, $site['logo'] => $x[val] 
+     */
     $$var[$key] = $x['val'];
 
 endwhile;
 
-// echo '<pre>';
-// print_r($site);
-// print_r($social);
-// print_r($tema);
-// echo '</pre>';
+/*
+ * Aqui, teremos os arrais de configuração, obtidas à partir da tabela 'config':
+ *     $site[]   --> Contém as configurações do aplicativo
+ *     $social[] --> Contém a lista e redes sociais
+ * 
+ * Podemos ainda criar outras arrays, adicionando novos valores em 'config'.
+ * Por exemplo, para adicionar um array '$teste[]', criamos, por exemplo, as entradas:
+ * 
+ *    Campo 'var'      │ Campo 'val'
+ *   ──────────────────┼─────────────
+ *    teste_chave1     │ Teste 1
+ *    teste_chave2     │ Outro teste
+ *    teste_outrachave │ Mais um teste
+ *      │  │    │
+ *      │  │    └──> chave do array
+ *      │  └───────> separador
+ *      └──────────> nome do array
+ * 
+ * Temos como resultado um novo array no ambiente:
+ * 
+ *    Array / chave        │ Valor
+ *   ──────────────────────┼─────────────
+ *    $teste['chave1']     │ 'Teste 1'
+ *    $teste['chave2']     │ 'Outro teste'
+ *    $teste['outrachave'] │ 'Mais um teste'
+ */
 
 // Define o título <title>...</title> de cada página
 $page_title = "";
@@ -102,4 +136,11 @@ function sanitize($field_name, $field_type)
 
     // Retorna o valor do campo já sanitizado.
     return $field_value;
+}
+
+// Valida datas
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
 }
