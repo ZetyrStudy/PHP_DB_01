@@ -39,6 +39,10 @@ $social_list .= '</ul>';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/img/favicon.png">
     <title><?php echo $page_title; ?></title>
+    <style>
+        <?php echo $site['css'] ?>
+    </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -70,6 +74,21 @@ $social_list .= '</ul>';
         <a href="/page/about.php"><?php if ($page_menu == 'about') echo "<strong>SOBRE</strong>";
                                     else echo "Sobre"; ?></a>
 
+        <?php if (!isset($_COOKIE['user'])) : ?>
+            &bull;
+            <a href="/user/new.php"><?php if ($page_menu == 'new') echo "<strong>CADASTRE-SE</strong>";
+                                    else echo "Cadastre-se"; ?></a>
+
+            &bull;
+            <a href="/user/login.php"><?php if ($page_menu == 'login') echo "<strong>LOGUE-SE</strong>";
+                                        else echo "Logue-se"; ?></a>
+        <?php else : ?>
+
+            &bull;
+            <a href="/user/profile.php"><?php if ($page_menu == 'profile') echo "<strong>OLÁ!</strong>";
+                                        else echo "Olá!"; ?></a>
+
+        <?php endif; ?>
     </nav>
 
     <?php // Conteúdo principal 

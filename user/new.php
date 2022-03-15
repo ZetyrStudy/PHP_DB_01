@@ -46,9 +46,20 @@ if (isset($_POST['send'])) :
         $form['birth'] = '';
     else :
 
-        // Cria a query para slvar no banco de dados.
+        /*
+        // Pesquisa pelo e-mail
+        $sql = "SELECT user_id FROM `users` WHERE user_email = 'contato@luferat.net';";
+        $res = $conn->query($sql);
 
-        $sql = <<<SQL
+        // Se e-mail existe
+        if ($res->num_rows > 0) :
+            $form['feedback'] = '<h3 style="color:red">Erro: este e-mail já está em uso!</h3>';
+
+        else :
+            */
+
+            // Cria a query para salvar no banco de dados.
+            $sql = <<<SQL
 
 INSERT INTO users (
     user_name,
@@ -65,14 +76,14 @@ INSERT INTO users (
 
 SQL;
 
-        // Salva contato no banco de dados.
-        $conn->query($sql);
+            // Salva contato no banco de dados.
+            $conn->query($sql);
 
-        // Obtém somente primeiro nome do rementente.
-        $first_name = explode(" ", $form['name'])[0];
+            // Obtém somente primeiro nome do rementente.
+            $first_name = explode(" ", $form['name'])[0];
 
-        // Cria mensagem de confirmação.
-        $form['feedback'] = <<<OUT
+            // Cria mensagem de confirmação.
+            $form['feedback'] = <<<OUT
         
     <h3>Olá {$first_name}!</h3>
     <p>Seu cadastro foi criado com sucesso.</p>
@@ -81,12 +92,30 @@ SQL;
     
 OUT;
 
-        // Oculto o formulário.
-        $show_form = false;
+            // Oculto o formulário.
+            $show_form = false;
 
-    // Data de envio.
+            // Data de envio.
+            $now = date('d/m/Y \à\s H:i');
 
-    // Enviar e-mail para o administrador.
+            // Enviar e-mail para o administrador.
+            $to = $site['admin'];
+            $sj = 'Novo cadastro em ' . $site['name'] . '.';
+            $msg = <<<MSG
+
+Um novo usuário se cadastrou em {$site['name']}:
+
+    Data: {$now}
+    Nome: {$form['name']}
+    E-mail: {$form['email']}
+    Nascimento: {$form['birth']}
+
+Obrigado...
+
+MSG;
+            @mail($to, $sj, $msg);
+
+        // endif;
 
     endif;
 
@@ -100,7 +129,7 @@ endif; // if (isset($_POST['send']))
 $page_title = "";
 
 // Opção ativa no menu
-$page_menu = "index";
+$page_menu = "new";
 
 // Inclui o cabeçalho da página
 require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";

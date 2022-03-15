@@ -144,3 +144,14 @@ function validateDate($date, $format = 'Y-m-d')
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
+
+// Converte 'system date' para 'BR date'.
+function date_to_br($sysdate) {
+    
+    // Se é data e hora...
+    if (str_contains($sysdate, ' ')) return date('d/m/Y \à\s H:i', strtotime($sysdate));
+
+    // Se é somente data...
+    else return date('d/m/Y', strtotime($sysdate));
+
+}
