@@ -11,27 +11,30 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
 $form['feedback'] = '';
 $show_form = true;
 
+//debug($_POST);
+//debug($sql);
+//debug($form);
+
 // Se não estiver logado, vai para a 'index'.
 if (!isset($_COOKIE['user'])) header('Location: /');
 
-if (isset($_POST['send-profile'])) :
-
-    // debug($_POST);
+if (isset($_POST['send-password'])) :
 
     // Obtém os valores dos campos, sanitiza e armazena nas variáveis.
-    $form['user_name'] = sanitize('name', 'string');
-    $form['user_birth'] = sanitize('birth', 'string');
-    $form['user_email'] = $user['user_email'];
     $form['password'] = sanitize('password', 'string');
+    $form['new-password'] = sanitize('new-password', 'string');
+    $form['verify-password'] = sanitize('verify-password', 'string');
 
     // Verifica se todos os campos form preenchidos
-    if ($form['user_name'] === '' or $form['user_birth'] === '' or $form['password'] === '') :
+    if ($form['password'] === '' or $form['new-password'] === '' or $form['verify-password'] === '') :
         $form['feedback'] = '<h3 style="color:red">Erro: por favor, preencha todos os campos!</h3>';
+        $form['password'] = $form['new-password'] = $form['verify-password'] = '';
 
     // Verifica se a data é válida
-    elseif (!validate_date($form['user_birth'])) :
-        $form['feedback'] = '<h3 style="color:red">Erro: a data de nascimento está incorreta!</h3>';
-        $form['user_birth'] = $user['user_birth'];
+    elseif ($form['new-password'] !== $form['verify-password']) :
+        $form['feedback'] = '<h3 style="color:red">Erro: a nova senha não foi repetida corretamente!</h3>';
+        $form['password'] = $form['new-password'] = $form['verify-password'] = '';
+
     else :
 
         // String de atualização
@@ -39,14 +42,13 @@ if (isset($_POST['send-profile'])) :
 
 UPDATE users 
 SET 
-    user_name = '{$form['user_name']}',
-    user_birth = '{$form['user_birth']}'
+user_password = SHA2('{$form['new-password']}', 512)
 WHERE user_id = '{$user['user_id']}' 
 AND user_password = SHA2('{$form['password']}', 512);
 
 SQL;
 
-        // Executa a query
+               // Executa a query
         $res = $conn->query($sql);
 
         // Testa o resultado da atualização
@@ -54,7 +56,7 @@ SQL;
 
         // Se não atualizou...
         if ($result == 0) :
-            $form['feedback'] = '<h3 style="color:red">Erro: a senha está incorreta ou nada foi atualizado!</h3>';
+            $form['feedback'] = '<h3 style="color:red">Erro: a senha antiga está incorreta ou ela é igual a anterior!</h3>';
 
         // Se deu erro no SQL...
         elseif ($result == -1) :
@@ -63,14 +65,11 @@ SQL;
         // Se deu tudo certo...
         else :
 
-            // Obtém somente primeiro nome do rementente.
-            $first_name = explode(" ", $form['user_name'])[0];
-
             // Cria mensagem de confirmação.
             $form['feedback'] = <<<OUT
                     
-                <h3>Olá {$first_name}!</h3>
-                <p>Seu cadastro foi atualizado com sucesso.</p>
+                
+                <p>Sua senha foi atualizada com sucesso.</p>
                 <p><em>Obrigado...</em></p>
 
                 
@@ -133,7 +132,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
         }
     </script>
 
-    <h2>Editar perfil</h2>
+    <h2>Editar senha</h2>
 
     <?php echo $form['feedback']; ?>
 
@@ -141,29 +140,23 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 
         <p>Altere os dados no formulário abaixo:</p>
 
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" name="edit-profile">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" name="edit-password">
 
-            <input type="hidden" name="send-profile" value="true">
-
-            <p>
-                <label for="name">Nome:</label>
-                <input type="text" name="name" id="name" placeholder="Seu nome completo." value="<?php echo $form['user_name'] ?>" autofocus>
-            </p>
-
-            <p>
-                <label for="email">E-mail:</label>
-                <input type="email" name="email" id="email" placeholder="Seu e-mail principal." value="<?php echo $form['user_email'] ?>" disabled>
-                <small>O e-mail não pode ser alterado.</small>
-            </p>
-
-            <p>
-                <label for="birth">Nascimento:</label>
-                <input type="date" name="birth" id="birth" placeholder="Sua data de nascimento" value="<?php echo $form['user_birth'] ?>">
-            </p>
+            <input type="hidden" name="send-password" value="true">
 
             <p>
                 <label for="password">Senha atual:</label>
                 <input type="password" name="password" id="password" placeholder="Sua senha." value="">
+            </p>
+
+            <p>
+                <label for="new-password">Nova senha:</label>
+                <input type="password" name="new-password" id="new-password" placeholder="Nova senha." value="">
+            </p>
+
+            <p>
+                <label for="verify-password">Repita nova senha:</label>
+                <input type="password" name="verify-password" id="verify-password" placeholder="Repita nova senha." value="">
             </p>
 
             <p>

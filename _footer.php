@@ -40,6 +40,8 @@
 
 </footer>
 
+</div>
+
 </body>
 
 </html>

@@ -10,16 +10,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
 // Se não estiver logado, vai para a 'index'.
 if (!isset($_COOKIE['user'])) header('Location: /');
 
-// Obtém dados do usuário pelo cookie
-$user = json_decode($_COOKIE['user'], true);
-
-// Converte datas para pt-BR
-$user['birth_br'] = date_to_br($user['user_birth']);
-$user['date_br'] = date_to_br($user['user_date']);
-
-// Somente primeiro nome
-$user['first_name'] = explode(' ', $user['user_name'])[0];
-
 /*********************************************
  * Seu código PHP desta página termina aqui! *
  *********************************************/
@@ -28,7 +18,7 @@ $user['first_name'] = explode(' ', $user['user_name'])[0];
 $page_title = "";
 
 // Opção ativa no menu
-$page_menu = "index";
+$page_menu = "profile";
 
 // Inclui o cabeçalho da página
 require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
@@ -65,7 +55,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 
         <tr>
             <td colspan="2">
-                <a href="/user/edit.php">Editar perfil</a>
+                <a href="/user/edit.php">Editar perfil</a> 
+                &bull;
+                <a href="/user/password.php">Alterar senha</a>
             </td>
         </tr>
 

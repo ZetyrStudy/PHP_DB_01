@@ -102,6 +102,30 @@ $page_title = "";
 // Define o link ativo no menu principal
 $page_menu = "";
 
+/*****************************************************************************
+ * Verifica se tem usuário logado, obtendo os dados deste, direto do cookie. *
+ *****************************************************************************/
+
+// Verifica se usuário está logado, testando o cookie dele.
+if (isset($_COOKIE['user'])) :
+
+    // Obtém dados do usuário pelo cookie
+    $user = json_decode($_COOKIE['user'], true);
+
+    // Converte datas para pt-BR
+    $user['birth_br'] = date_to_br($user['user_birth']);
+    $user['date_br'] = date_to_br($user['user_date']);
+
+    // Somente primeiro nome
+    $user['first_name'] = explode(' ', $user['user_name'])[0];
+
+else :
+
+    // Define nome do usuário para o menu
+    $user['first_name'] = '';
+
+endif;
+
 /********************
  * Funções globais. *
  ********************/
@@ -139,19 +163,28 @@ function sanitize($field_name, $field_type)
 }
 
 // Valida datas
-function validateDate($date, $format = 'Y-m-d')
+function validate_date($date, $format = 'Y-m-d')
 {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
 
 // Converte 'system date' para 'BR date'.
-function date_to_br($sysdate) {
-    
+function date_to_br($sysdate)
+{
+
     // Se é data e hora...
     if (str_contains($sysdate, ' ')) return date('d/m/Y \à\s H:i', strtotime($sysdate));
 
     // Se é somente data...
     else return date('d/m/Y', strtotime($sysdate));
+}
 
+// Função para ajudar a 'debugar' o código.
+function debug($data, $exit = false)
+{
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    if ($exit) exit;
 }

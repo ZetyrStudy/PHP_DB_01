@@ -41,7 +41,7 @@ if (isset($_POST['send'])) :
         $form['password'] = $form['password2'] = '';
 
     // Verifica se a data é válida
-    elseif (!validateDate($form['birth'])) :
+    elseif (!validate_date($form['birth'])) :
         $form['feedback'] = '<h3 style="color:red">Erro: a data de nascimento está incorreta!</h3>';
         $form['birth'] = '';
     else :

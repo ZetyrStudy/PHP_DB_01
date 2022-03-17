@@ -10,9 +10,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
 // Se não estiver logado, vai para a 'index'.
 if (!isset($_COOKIE['user'])) header('Location: /');
 
-// Obtém dados do usuário pelo cookie
-$user = json_decode($_COOKIE['user'], true);
-
 // Realmente quer sair
 if (isset($_GET['logout'])) :
 
@@ -44,7 +41,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 <article>
 
     <h2>Sair / Logout</h2>
+
     <p>Tem certeza que deseja sair do site?</p>
+    
     <p><em>Se sair não terá acesso aos recursos exclusivos até que se logue novamente...</em></p>
 
     <p><a href="/">Não sair agora</a></p>

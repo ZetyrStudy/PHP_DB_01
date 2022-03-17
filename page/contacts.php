@@ -116,6 +116,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 ?>
 <article>
 
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
     <h2>Faça contato</h2>
     <p>Preencha todos os campos do formulário abaixo para entrar em contato com a equipe do <strong><?php echo $site['name'] ?></strong>.</p>
 

@@ -49,6 +49,8 @@ $social_list .= '</ul>';
 
     <a id="top"></a>
 
+    <div class="wrap">
+
     <?php // Cabeçalho 
     ?>
     <header>
@@ -85,8 +87,8 @@ $social_list .= '</ul>';
         <?php else : ?>
 
             &bull;
-            <a href="/user/profile.php"><?php if ($page_menu == 'profile') echo "<strong>OLÁ!</strong>";
-                                        else echo "Olá!"; ?></a>
+            <a href="/user/profile.php"><?php if ($page_menu == 'profile') echo "<strong>OLÁ {$user['first_name']}!</strong>";
+                                        else echo "Olá {$user['first_name']}!"; ?></a>
 
         <?php endif; ?>
     </nav>
